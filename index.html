@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="WaifuSphere - Platform Galeri Premium untuk Penggemar Anime dan Manga">
+    <meta name="theme-color" content="#a020f0">
+    <title> WaifuSphere - Premium Waifu Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="logoWS.png">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner-large">
+            <div class="spinner-circle"></div>
+            <p>Loading...</p>
+        </div>
+    </div>
+    <!-- NAVIGATION -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">✧</span>
+                <span class="logo-text">WaifuSphere</span>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#myistri" class="nav-link">MyIstri</a></li>
+                <li><a href="#gallery" class="nav-link">Gallery</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+            </ul>
+            <div class="nav-right">
+                <input type="text" class="search-box" placeholder="Cari karakter..." aria-label="Search characters">
+                <button class="theme-toggle" id="themeToggle" title="Toggle Dark/Light Mode" aria-label="Toggle theme">🌙</button>
+                <button class="profile-btn" title="Profile" aria-label="Go to profile">👤</button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle mobile menu" aria-expanded="false">☰</button>
+            </div>
+        </div>
+        <div class="scroll-indicator"></div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero page-section" id="home">
+        <div class="hero-background">
+            <div class="stars"></div>
+            <div class="gradient-orbs"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">✨ Galeri Eksklusif Premium</div>
+            <h1 class="hero-title">WaifuSphere</h1>
+            <p class="hero-subtitle">Temukan Karakter Anime Impian Anda di Platform Terbaik</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary">Jelajahi Galeri</button>
+                <button class="btn btn-outline">Pelajari Lebih</button>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-box">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Karakter</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">860K+</div>
+                    <div class="stat-label">Fans</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">9.9★</div>
+                    <div class="stat-label">Rating</div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-character">
+            <div class="character-image featured-char">
+                <img src="https://i.pinimg.com/736x/e3/2f/64/e32f643ebcd8a040991df57e0a514b0e.jpg" alt="Featured Waifu" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
+            </div>
+        </div>
+    </section>
+
+    <!-- MY ISTRI - FAVORITES CHART -->
+    <section class="myistri-section page-section" id="myistri">
+        <div class="section-header">
+            <h2>💕 MyIstri</h2>
+            <p>Favoritmu - Kumpulan Istri Pilihan</p>
+        </div>
+        <div class="myistri-controls">
+            <button class="btn btn-primary" id="shareFavoritesBtn" onclick="generateShareLink()" title="Bagikan favorites Anda">
+                📤 Bagikan Favorites
+            </button>
+            <button class="btn btn-secondary" id="clearFavoritesBtn" onclick="clearAllFavorites()" title="Hapus semua favorites">
+                🗑️ Hapus Semua
+            </button>
+        </div>
+        <div class="myistri-container">
+            <div class="myistri-chart">
+                <canvas id="favoritesChart" width="400" height="300"></canvas>
+            </div>
+            <div class="myistri-list">
+                <h3>Karakter Favorit</h3>
+                <div class="favorites-grid" id="favoritesGrid">
+                    <div class="empty-state">
+                        <p>❤️ Belum ada favorit</p>
+                        <p class="small-text">Klik tombol hati pada karakter untuk menambahkan ke MyIstri</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SHARE FAVORITES MODAL -->
+    <div id="shareModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeShareModal()">✕</button>
+            <h2>Bagikan Favorites Anda 💕</h2>
+            <p>Bagikan link ini ke teman-teman untuk menunjukkan koleksi istri pilihan Anda:</p>
+            <div class="share-link-container">
+                <input type="text" id="shareLink" class="share-link-input" readonly>
+                <button class="btn btn-primary" onclick="copyShareLink()">📋 Copy Link</button>
+            </div>
+            <p class="share-info">Link ini berisi data favorites Anda. Orang lain bisa membuka link ini untuk melihat daftar istri pilihan Anda!</p>
+        </div>
+    </div>
+
+    <!-- POPULAR CHARACTERS -->
+    <section class="characters-section page-section" id="popular">
+        <div class="section-header">
+            <h2>Paling Populer</h2>
+            <p>Karakter dengan penggemar terbanyak</p>
+        </div>
+        <div class="character-grid">
+            <!-- Card 1 -->
+            <div class="character-card">
+                <div class="card-image">
+                    <img src="https://i.pinimg.com/736x/80/38/7d/80387dc2b23efd3be82bf7ecbb58e589.jpg" alt="Waguri Kou" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+                    <div class="overlay">
+                        <h3>Karakter Anime</h3>
+                        <p>Genre: Romance, Comedy, Slice of Life, School/Drama</p>
+                        <div class="rarity rarity-ssr">SSR</div>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <h3>Karakter 1</h3>
+                    <p class="genre">Anime Series</p>
+                    <div class="rating">⭐⭐⭐⭐⭐</div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="character-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1566407522369-f21b99eef01b?w=300&h=420&fit=crop" alt="Karakter 2" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+                    <div class="overlay">
+                        <h3>Karakter Anime</h3>
+                        <p>Genre: Romance</p>
+                        <div class="rarity rarity-ssr">SSR</div>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <h3>Karakter 2</h3>
+                    <p class="genre">Manga Series</p>
+                    <div class="rating">⭐⭐⭐⭐⭐</div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="character-card">
+                <div class="card-image">
+                    <img src="https://i.pinimg.com/736x/31/06/d4/3106d45d8f408cfccfa2f83fb022074a.jpg" alt="Emily RE9" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+                    <div class="overlay">
+                        <h3>Emily Grahamm</h3>
+                        <p>Genre: Horror, Survival, Adventure</p>
+                        <div class="rarity rarity-sr">SRMA</div>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <h3>Resident Evil 9</h3>
+                    <p class="genre">Game Series</p>
+                    <div class="rating">⭐⭐⭐⭐</div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="character-card">
+                <div class="card-image">
+                    <img src="https://i.pinimg.com/736x/5b/68/94/5b689426bca39e7d675f3a25dae0f2fe.jpg" alt="Karakter 4" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+                    <div class="overlay">
+                        <h3>Shikimori Miyako</h3>
+                        <p>Genre: Romance</p>
+                        <div class="rarity rarity-ssr">SSR</div>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <h3>Karakter 4</h3>
+                    <p class="genre">Anime Series</p>
+                    <div class="rating">⭐⭐⭐⭐⭐</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RECENTLY ADDED -->
+    <section class="characters-section page-section" id="recent">
+        <div class="section-header">
+            <h2>Terbaru Ditambahkan</h2>
+            <p>Karakter terbaru dalam galeri kami</p>
+        </div>
+        <div class="character-grid">
+            <!-- Card 1 -->
+            <div class="character-card">
+                <div class="card-image">
+                    <img src="https://i.pinimg.com/736x/dd/f4/74/ddf474e81fb9d5c40b791642dcbf659e.jpg" alt="Karakter Baru 1" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+                    <div class="new-badge">NEW</div>
+                    <div class="overlay">
+                        <h3>Karakter Baru</h3>
+                        <p>Genre: Comedy</p>
+                        <div class="rarity rarity-r">R</div>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <h3>Karakter Baru 1</h3>
+                    <p class="genre">Latest Anime</p>
+                    <div class="rating">⭐⭐⭐⭐</div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="character-card">
+                <div class="card-image">
+                    <img src="https://i.pinimg.com/736x/03/e4/07/03e40722b997df8d5b6d36f7e318db8b.jpg" alt="Karakter Baru 2" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+                    <div class="new-badge">NEW</div>
+                    <div class="overlay">
+                        <h3>Karakter Baru</h3>
+                        <p>Genre: Drama</p>
+                        <div class="rarity rarity-sr">SR</div>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <h3>Karakter Baru 2</h3>
+                    <p class="genre">New Manga</p>
+                    <div class="rating">⭐⭐⭐⭐⭐</div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="character-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1578665996442-48f60103fc91?w=300&h=420&fit=crop" alt="Karakter Baru 3" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+                    <div class="new-badge">NEW</div>
+                    <div class="overlay">
+                        <h3>Karakter Baru</h3>
+                        <p>Genre: Fantasy</p>
+                        <div class="rarity rarity-ssr">SSR</div>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <h3>Karakter Baru 3</h3>
+                    <p class="genre">New Game</p>
+                    <div class="rating">⭐⭐⭐⭐</div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="character-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1568667256549-094345857948?w=300&h=420&fit=crop" alt="Karakter Baru 4" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+                    <div class="new-badge">NEW</div>
+                    <div class="overlay">
+                        <h3>Karakter Baru</h3>
+                        <p>Genre: Thriller</p>
+                        <div class="rarity rarity-r">R</div>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <h3>Karakter Baru 4</h3>
+                    <p class="genre">Upcoming</p>
+                    <div class="rating">⭐⭐⭐⭐⭐</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY PAGE (HIDDEN BY DEFAULT) -->
+    <section class="gallery-section page-section" id="gallery" style="display: none;">
+        <div class="gallery-container">
+            <!-- SIDEBAR FILTER -->
+            <aside class="filter-sidebar" id="filterSidebar">
+                <div class="filter-header">
+                    <h3>Filter & Cari</h3>
+                    <button class="reset-filters" title="Reset all filters">✕</button>
+                </div>
+
+                <!-- Search -->
+                <div class="filter-group">
+                    <h4>Nama Karakter</h4>
+                    <input type="text" class="filter-search" placeholder="Cari nama..." id="characterNameSearch">
+                </div>
+
+                <!-- Sort -->
+                <div class="filter-group">
+                    <h4>Urutkan</h4>
+                    <select class="filter-select" id="sortSelect">
+                        <option value="newest">Terbaru</option>
+                        <option value="name">Nama (A-Z)</option>
+                        <option value="rating">Rating (Tertinggi)</option>
+                        <option value="rarity">Rarity</option>
+                    </select>
+                </div>
+
+                <!-- Genre Filter -->
+                <div class="filter-group">
+                    <h4>Genre</h4>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="action" class="genre-filter">
+                        <span>Action</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="romance" class="genre-filter">
+                        <span>Romance</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="comedy" class="genre-filter">
+                        <span>Comedy</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="drama" class="genre-filter">
+                        <span>Drama</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="fantasy" class="genre-filter">
+                        <span>Fantasy</span>
+                    </label>
+                </div>
+
+                <!-- Rarity Filter -->
+                <div class="filter-group">
+                    <h4>Rarity</h4>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="ssr" class="rarity-filter">
+                        <span>SSR (Legendary)</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="sr" class="rarity-filter">
+                        <span>SR (Rare)</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="r" class="rarity-filter">
+                        <span>R (Uncommon)</span>
+                    </label>
+                </div>
+
+                <!-- Hair Color Filter -->
+                <div class="filter-group">
+                    <h4>Warna Rambut</h4>
+                    <div class="color-filter-grid">
+                        <label class="color-checkbox" title="Hitam">
+                            <input type="checkbox" value="black" class="hair-filter" hidden>
+                            <span style="background-color: #000;"></span>
+                        </label>
+                        <label class="color-checkbox" title="Biru">
+                            <input type="checkbox" value="blue" class="hair-filter" hidden>
+                            <span style="background-color: #0066ff;"></span>
+                        </label>
+                        <label class="color-checkbox" title="Pink">
+                            <input type="checkbox" value="pink" class="hair-filter" hidden>
+                            <span style="background-color: #ff69b4;"></span>
+                        </label>
+                        <label class="color-checkbox" title="Putih">
+                            <input type="checkbox" value="white" class="hair-filter" hidden>
+                            <span style="background-color: #ffffff; border: 2px solid #ccc;"></span>
+                        </label>
+                        <label class="color-checkbox" title="Merah">
+                            <input type="checkbox" value="red" class="hair-filter" hidden>
+                            <span style="background-color: #ff0000;"></span>
+                        </label>
+                        <label class="color-checkbox" title="Blonde">
+                            <input type="checkbox" value="blonde" class="hair-filter" hidden>
+                            <span style="background-color: #ffd700;"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <button id="applyFiltersBtn" class="btn btn-primary" style="width: 100%; margin-top: 20px;">Terapkan Filter</button>
+            </aside>
+
+            <!-- MAIN GALLERY -->
+            <main class="gallery-main">
+                <div class="gallery-header">
+                    <div class="gallery-title-section">
+                        <h2>Galeri Lengkap</h2>
+                        <p class="gallery-subtitle" id="gallerySubtitle">Menampilkan semua karakter</p>
+                    </div>
+                    <div class="gallery-controls">
+                        <button class="view-toggle" id="gridViewBtn" title="Grid view">⊞</button>
+                        <button class="view-toggle" id="listViewBtn" title="List view">≡</button>
+                    </div>
+                </div>
+
+                <!-- Loading Spinner -->
+                <div class="loading-spinner" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Loading karakter...</p>
+                </div>
+
+                <!-- Gallery Grid -->
+                <div class="gallery-grid" id="galleryGrid">
+                    <!-- Karakter cards akan di-generate oleh JavaScript -->
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination" id="pagination"></div>
+            </main>
+        </div>
+    </section>
+
+    <!-- CHARACTER DETAIL PAGE (HIDDEN BY DEFAULT) -->
+    <section class="character-detail page-section" id="detail" style="display: none;">
+        <div class="detail-container">
+            <!-- LEFT SIDE: CHARACTER IMAGE -->
+            <div class="detail-left">
+                <div class="main-image">
+                    <img src="https://i.pinimg.com/736x/6f/4d/0c/6f4d0cd0cb03a9bc407ab3697782ec85.jpg" alt="Character" style="width: 100%; height: 100%; object-fit: cover; border-radius: 16px;">
+                </div>
+                <div class="image-thumbnails">
+                    <div class="thumbnail"><img src="https://i.pinimg.com/736x/dd/f4/74/ddf474e81fb9d5c40b791642dcbf659e.jpg" alt="Thumb 1" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;"></div>
+                    <div class="thumbnail"><img src="https://images.unsplash.com/photo-1566407522369-f21b99eef01b?w=100&h=100&fit=crop" alt="Thumb 2" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;"></div>
+                    <div class="thumbnail"><img src="https://images.unsplash.com/photo-1545389352-f529a4b1dff6?w=100&h=100&fit=crop" alt="Thumb 3" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;"></div>
+                    <div class="thumbnail"><img src="https://images.unsplash.com/photo-1613224487654-d8a42cb73144?w=100&h=100&fit=crop" alt="Thumb 4" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;"></div>
+                    <div class="thumbnail"><img src="https://images.unsplash.com/photo-1612894372029-52421025a969?w=100&h=100&fit=crop" alt="Thumb 5" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;"></div>
+                </div>
+            </div>
+
+            <!-- RIGHT SIDE: CHARACTER INFO -->
+            <div class="detail-right">
+                <div class="detail-header">
+                    <h1 class="character-name">Nama Karakter</h1>
+                    <p class="series-origin">Series: Anime Title</p>
+                    <div class="genre-badges">
+                        <span class="badge">Romance</span>
+                        <span class="badge">Slice of Life</span>
+                    </div>
+                </div>
+
+                <div class="character-stats">
+                    <h3>Statistik</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-label">Tinggi</span>
+                            <span class="stat-value">160 cm</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Hobi</span>
+                            <span class="stat-value">Reading, Gaming</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Seiyuu</span>
+                            <span class="stat-value">Voice Actor Name</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Warna Rambut</span>
+                            <span class="stat-value">Black</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Warna Mata</span>
+                            <span class="stat-value">Blue</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Rarity</span>
+                            <span class="stat-value rarity-ssr">SSR</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="character-bio">
+                    <h3>Biografi</h3>
+                    <p>Karakter ini adalah salah satu tokoh utama yang memiliki kepribadian unik dan menarik. Dengan gaya hidup yang penuh warna, karakter ini menjadi favorit banyak penggemar di seluruh dunia. Kehidupan dan petualangannya dalam seri ini selalu mencuri perhatian dengan cerita yang mendalam dan emosional yang menyentuh hati.</p>
+                </div>
+
+                <button class="btn-favorite">
+                    <span class="heart-icon">♡</span>
+                    Add to Favorite
+                </button>
+            </div>
+        </div>
+
+        <!-- SIMILAR CHARACTERS -->
+        <section class="similar-characters">
+            <h2>Karakter Serupa</h2>
+            <div class="character-grid">
+                <div class="character-card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1566407522369-f21b99eef01b?w=300&h=420&fit=crop" alt="Similar Character 1" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+                        <div class="overlay">
+                            <h3>Similar Char</h3>
+                            <p>Genre: Similar</p>
+                            <div class="rarity rarity-sr">SR</div>
+                        </div>
+                    </div>
+                    <div class="card-info">
+                        <h3>Similar Character 1</h3>
+                        <p class="genre">Series</p>
+                        <div class="rating">⭐⭐⭐⭐</div>
+                    </div>
+                </div>
+
+                <div class="character-card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1545389352-f529a4b1dff6?w=300&h=420&fit=crop" alt="Similar Character 2" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+                        <div class="overlay">
+                            <h3>Similar Char</h3>
+                            <p>Genre: Similar</p>
+                            <div class="rarity rarity-ssr">SSR</div>
+                        </div>
+                    </div>
+                    <div class="card-info">
+                        <h3>Similar Character 2</h3>
+                        <p class="genre">Series</p>
+                        <div class="rating">⭐⭐⭐⭐⭐</div>
+                    </div>
+                </div>
+
+                <div class="character-card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1613224487654-d8a42cb73144?w=300&h=420&fit=crop" alt="Similar Character 3" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+                        <div class="overlay">
+                            <h3>Similar Char</h3>
+                            <p>Genre: Similar</p>
+                            <div class="rarity rarity-r">R</div>
+                        </div>
+                    </div>
+                    <div class="card-info">
+                        <h3>Similar Character 3</h3>
+                        <p class="genre">Series</p>
+                        <div class="rating">⭐⭐⭐⭐</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <!-- ABOUT SECTION (HIDDEN BY DEFAULT) -->
+    <section class="about-section page-section" id="about" style="display: none;">
+        <div class="about-container">
+            <div class="about-header">
+                <h1>About WaifuSphere</h1>
+                <p class="about-subtitle">Tempat Terbaik untuk Menemukan dan Berbagi Karakter Favorit Anda</p>
+            </div>
+
+            <div class="about-content">
+                <!-- ABOUT US -->
+                <div class="about-card">
+                    <div class="card-icon">📚</div>
+                    <h3>Tentang Kami</h3>
+                    <p>WaifuSphere adalah platform galeri premium yang didedikasikan untuk penggemar anime, manga, dan game di seluruh dunia. Kami menyediakan tempat yang aman dan menyenangkan untuk mengeksplorasi dan menemukan karakter favorit Anda.</p>
+                </div>
+
+                <!-- MISSION -->
+                <div class="about-card">
+                    <div class="card-icon">🎯</div>
+                    <h3>Misi Kami</h3>
+                    <p>Kami berkomitmen untuk memberikan pengalaman terbaik dalam menjelajahi dunia karakter anime dan manga. Misi kami adalah menciptakan komunitas yang dinamis dan mendukung untuk semua penggemar.</p>
+                </div>
+
+                <!-- FEATURES -->
+                <div class="about-card">
+                    <div class="card-icon">✨</div>
+                    <h3>Fitur Utama</h3>
+                    <ul class="features-list">
+                        <li>✓ Galeri karakter yang lengkap dan terupdate</li>
+                        <li>✓ Filter canggih berdasarkan genre, rarity, dan warna rambut</li>
+                        <li>✓ Deskripsi karakter yang detail</li>
+                        <li>✓ Sistem rating dan favorit</li>
+                        <li>✓ Pencarian yang cepat dan akurat</li>
+                    </ul>
+                </div>
+
+                <!-- COMMUNITY -->
+                <div class="about-card">
+                    <div class="card-icon">👥</div>
+                    <h3>Komunitas</h3>
+                    <p>Bergabunglah dengan ribuan penggemar anime lainnya! Bagikan karakter favorit Anda, berinteraksi dengan komunitas, dan temukan waifu impian Anda. Kami memiliki forum diskusi dan social media yang aktif.</p>
+                </div>
+            </div>
+
+            <div class="testimonials-section">
+                <h2>Testimoni Penggemar</h2>
+                <div class="testimonial-grid">
+                    <div class="testimonial-card">
+                        <p>"WaifuSphere memberikan pengalaman terbaik untuk menemukan karakter favorit saya. Desainnya sangat halus dan koleksinya lengkap sekali!"</p>
+                        <span>— Maya, Otaku</span>
+                    </div>
+                    <div class="testimonial-card">
+                        <p>"Filter dan detail karakter sangat membantu. Website ini cepat dan tampilannya benar-benar premium."</p>
+                        <span>— Rizal, Kolektor Anime</span>
+                    </div>
+                    <div class="testimonial-card">
+                        <p>"Setiap halaman memiliki animasi yang lembut. Membuat penjelajahan galeri jadi semakin asyik."</p>
+                        <span>— Ayu, Fanart Artist</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TEAM SECTION -->
+            <div class="team-section">
+                <h2>Tim Kami</h2>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="member-avatar">👨‍💻</div>
+                        <h4>Developer</h4>
+                        <p>Membuat platform terbaik untuk Anda</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar">🎨</div>
+                        <h4>Designer</h4>
+                        <p>Desain yang indah dan intuitif</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar">📊</div>
+                        <h4>Database Curator</h4>
+                        <p>Menjaga data karakter tetap akurat</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTACT -->
+            <div class="contact-section">
+                <h2>Hubungi Kami</h2>
+                <div class="contact-info">
+                    <a href="https://twitter.com" class="contact-link">🐦 Twitter</a>
+                    <a href="https://discord.com" class="contact-link">💬 Discord</a>
+                    <a href="https://instagram.com" class="contact-link">📸 Instagram</a>
+                    <a href="mailto:info@waifuhere.com" class="contact-link">✉️ Email</a>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="handleBackToHome()">Kembali ke Home</button>
+        </div>
+    </section>
+
+    <!-- PROFILE SECTION (HIDDEN BY DEFAULT) -->
+    <section class="profile-section page-section" id="profile" style="display: none;">
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-avatar">👤</div>
+                <div class="profile-info">
+                    <h1 id="profile-username">Renna Archymage</h1>
+                    <p class="profile-status">Member since 2020</p>
+                </div>
+            </div>
+
+            <div class="profile-content">
+                <!-- FAVORITES TAB -->
+                <div class="profile-tab active" data-tab="favorites">
+                    <h2>Karakter Favorit</h2>
+                    <div class="favorites-grid" id="favorites-grid">
+                        <div class="empty-state">
+                            <p>Belum ada karakter favorit. Klik tombol hati di galeri untuk menambahkan!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STATISTICS TAB -->
+                <div class="profile-tab" data-tab="stats">
+                    <h2>Statistik</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="stat-favorites">0</div>
+                            <p>Karakter Favorit</p>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="stat-visited">0</div>
+                            <p>Karakter Dikunjungi</p>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="stat-searches">0</div>
+                            <p>Pencarian Dilakukan</p>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="stat-ratings">0</div>
+                            <p>Rating Diberikan</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SETTINGS TAB -->
+                <div class="profile-tab" data-tab="settings">
+                    <h2>Pengaturan</h2>
+                    <div class="settings-form">
+                        <div class="setting-item">
+                            <label>Username</label>
+                            <input type="text" id="username-input" placeholder="Masukkan username" value="Guest User">
+                        </div>
+                        <div class="setting-item">
+                            <label>Email</label>
+                            <input type="email" id="email-input" placeholder="Masukkan email" value="guest@">
+                        </div>
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox" id="darkModeToggle" checked>
+                                Mode Gelap
+                            </label>
+                        </div>
+                        <button class="btn btn-primary" onclick="saveProfileSettings()">Simpan Pengaturan</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROFILE TABS NAVIGATION -->
+            <div class="profile-tabs">
+                <button class="tab-button active" data-tab="favorites">❤️ Favorit</button>
+                <button class="tab-button" data-tab="stats">📊 Statistik</button>
+                <button class="tab-button" data-tab="settings">⚙️ Pengaturan</button>
+            </div>
+
+            <button class="btn btn-outline" onclick="handleLogout()">Logout</button>
+            <button class="btn btn-secondary" onclick="handleBackToHome()">Kembali ke Home</button>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>WaifuSphere</h4>
+                <p>Platform galeri premium untuk penggemar anime dan manga</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Follow Us</h4>
+                <div class="social-links">
+                    <a href="#">Twitter</a>
+                    <a href="#">Discord</a>
+                    <a href="#">Instagram</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2020 WaifuSphere. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <button id="backToTopBtn" class="back-to-top" title="Kembali ke atas">↑</button>
+    <script src="script.js"></script>
+    <script src="favorites.js"></script>
+</body>
+</html>
